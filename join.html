@@ -25,11 +25,15 @@ a.btn{display:block;padding:15px 20px;border-radius:999px;font-weight:600;text-d
 </main>
 <script>
 // The trip id stays in the #fragment, so it never reaches any server.
-var id = (location.hash || "").slice(1);
-var ok = /^[0-9a-f-]{36}$/i.test(id);
-var link = ok ? "goingdutch://join/" + id : null;
 var open = document.getElementById("open");
-if (link) { open.href = link; setTimeout(function () { location.href = link; }, 150); }
-else { open.style.display = "none"; }
+function go() {
+  var id = (location.hash || "").slice(1);
+  var link = /^[0-9a-f-]{36}$/i.test(id) ? "goingdutch://join/" + id : null;
+  open.style.display = link ? "" : "none";
+  if (link) { open.href = link; setTimeout(function () { location.href = link; }, 150); }
+}
+go();
+// Safari can reuse an open tab for a new invite: follow the new trip, not the old one.
+window.addEventListener("hashchange", go);
 </script>
 </body></html>
