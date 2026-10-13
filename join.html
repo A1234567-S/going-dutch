@@ -21,19 +21,20 @@ a.btn{display:block;padding:15px 20px;border-radius:999px;font-weight:600;text-d
 <p>Open it in Going Dutch, then tap your name.</p>
 <a class="btn primary" id="open" href="#">Open in Going Dutch</a>
 <a class="btn secondary" href="https://apps.apple.com/app/id6815189694">Get Going Dutch on the App Store</a>
-<p class="small">Don’t have the app yet? Install it, then tap your invite link again.</p>
+<p class="small">No Going Dutch yet, or “Open” doesn’t work? Get the latest version from the App Store, then tap your invite link again.</p>
 </main>
 <script>
 // The trip id stays in the #fragment, so it never reaches any server.
+// No automatic jump to the app: on a phone without (the latest) Going Dutch,
+// Safari would show "address is invalid". The friend taps the button instead.
 var open = document.getElementById("open");
-function go() {
+function update() {
   var id = (location.hash || "").slice(1);
-  var link = /^[0-9a-f-]{36}$/i.test(id) ? "goingdutch://join/" + id : null;
-  open.style.display = link ? "" : "none";
-  if (link) { open.href = link; setTimeout(function () { location.href = link; }, 150); }
+  var ok = /^[0-9a-f-]{36}$/i.test(id);
+  open.style.display = ok ? "" : "none";
+  if (ok) open.href = "goingdutch://join/" + id;
 }
-go();
-// Safari can reuse an open tab for a new invite: follow the new trip, not the old one.
-window.addEventListener("hashchange", go);
+update();
+window.addEventListener("hashchange", update);
 </script>
 </body></html>
